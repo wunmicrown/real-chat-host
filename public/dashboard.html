@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="user-details-top">
+        <h1>Welcome to the dashboard</h1>
+        <div id="disp"></div>
+    </div>
+    <div class="signOutBtnDiv">
+        <button id="signOutBtn">Sign Out</button>
+    </div>
+    <hr>
+    <input type="text" placeholder="Type Your Chat" id="userInput">
+    <button id="msgBtn">Send Message</button>
+    <hr>
+    <div id="displayMsg"></div>
+    <script type="module">
+        //Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import {
+            GoogleAuthProvider,
+            getAuth,
+            signInWithPopup,
+            onAuthStateChanged,
+            sendEmailVerification,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+        // Firebase Configration
+        // Firebase Configration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5izpe8f8nFA9k1W5MZp7dHcmGrQSXqTA",
+            authDomain: "real-chat-app-b7326.firebaseapp.com",
+            projectId: "real-chat-app-b7326",
+            storageBucket: "real-chat-app-b7326.appspot.com",
+            messagingSenderId: "725922035900",
+            appId: "1:725922035900:web:05a95db3d7039183fcf8b9",
+            databaseURL: "https://real-chat-app-b7326-default-rtdb.firebaseio.com",
+        };
+        // Global Variable Declarations
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const database = getDatabase();
+        let todoIndex = 0
+        // All my functions
+        onAuthStateChanged(auth, (user) => {
+            console.log(user)
+            if (user) {
+                disp.innerHTML = `<h1>Welcome, ${user.displayName}</h1>
+                `
+            } else {
+                console.log("user is not signed in")
+                window.location.href = "index.html"
+            }
+        })
+        signOutBtn.addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    console.log("user iyaf sign out o")
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+        msgBtn.addEventListener("click", () => {
+            let dbRef = ref(database, `chatStore/${todoIndex}`)
+            let date = new Date()
+            let chat = {
+                message: userInput.value,
+                time: date.toLocaleTimeString(),
+                username: auth.currentUser.displayName,
+                photoURL: auth.currentUser.photoURL
+            }
+            set(dbRef, chat);
+            userInput.value = "";
+        })
+
+
+        // Display information from the database
+        let chatRef = ref(database, "chatStore")
+        onValue(chatRef, (snapshot) => {
+            displayMsg.innerHTML = "";
+            let data = snapshot.val();
+
+            if (data) {
+                // Convert the object to an array of messages
+                let messages = Object.values(data);
+                todoIndex = messages.length;
+
+                messages.forEach((eachItem) => {
+                    displayMsg.innerHTML += `
+            <div class="messagesDiv">
+                <div class="username-time">
+                    <h1 class="user-messege">${eachItem.message}</h1>
+                    <i style="color: white; font-size: 10px; font-weight: 400;">${eachItem.time}</i>
+                </div>
+                <div class="flex-wrap-container">
+                    <p class="username">${eachItem.username}</p> 
+                    <img src="${eachItem.photoURL}" alt="profile-pic" class="rounded-image">    
+                </div>
+            </div>
+        `;
+                });
+            } else {
+                todoIndex = 0;
+            }
+        });
+
+
+
+    </script>
+</body>
+
+</html>

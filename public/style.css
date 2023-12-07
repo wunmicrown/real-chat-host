@@ -1,0 +1,128 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #333;
+    font-size: 18px;
+    font-weight:600 ;
+  }
+  .user-details-top{
+    padding: 10px 20px 0px 20px;
+  }
+  .messagesDiv{
+    padding:5px;
+    flex-direction: "column";
+    max-height: 460px;
+    overflow-y: "scroll";
+  }
+  .username-time, .user-messege{
+    background-color: rgb(53, 52, 52);
+    color: #ffff !important;
+    width: 100%;
+    cursor: pointer;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 200px;
+  }
+  .username-time:hover, .user-messege:hover{
+    background-color: rgb(138, 129, 129);
+  }
+  #disp {
+    margin-top: 10px;
+  }
+  .signOutBtnDiv{
+    display: flex;
+    justify-content: end;
+    padding: 0px 50px 0px 50px;
+  }
+  #signOutBtn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  hr {
+    border: 1px solid #ddd;
+    margin-top: 20px;
+  }
+  
+  #userInput {
+    width: 70%;
+    flex: 1;
+    padding: 5px;
+    outline: none;
+    border: none;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  
+  #msgBtn {
+    background-color: #5bc0de;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  #displayMsg {
+    margin-top: 20px;
+    margin-left: 10px;
+    height: 200px;
+    overflow-y: scroll;
+  }
+  
+  #displayMsg h1 {
+    color: #333;
+  }
+  
+  #displayMsg i {
+    color: #888;
+  }
+  
+  #displayMsg p {
+    color: #555;
+  }
+  .rounded-image {
+    border-radius: 50%;
+    width: 50px; 
+    height: 50px; 
+}
+.flex-wrap-container{
+  display: flex !important;
+  gap: 10px;
+}
+.username{
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  padding-top: 15px;
+}
+
+
+

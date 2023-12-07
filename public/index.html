@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Chat App</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    .container{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+    }
+    .card {
+      margin: 10px 0px 10px 0px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    button {
+      background-color: #4285f4;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #3c77e0;
+    }
+    @media (max-width: 775px) {
+      h1 {
+      color: #333;
+      font-size: 18px;
+      font-weight: 800;
+    }
+  }
+    @media (max-width: 600px) {
+      h1 {
+      color: #333;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    button {
+      background-color: #4285f4;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    .container{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+    }
+    }
+  </style>
+</head>
+
+<body>
+ <div class="container">
+  <h1>Welcome to Real Chat App 🔥🔥🔥</h1>
+  <button id="signInBtn">Sign In with GOOGLE</button>
+  <div id="disp"></div>
+
+ </div>
+  <script type="module">
+    //Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import {
+      GoogleAuthProvider,
+      getAuth,
+      signInWithPopup,
+      sendEmailVerification,
+    } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+    // Firebase Configration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5izpe8f8nFA9k1W5MZp7dHcmGrQSXqTA",
+      authDomain: "real-chat-app-b7326.firebaseapp.com",
+      projectId: "real-chat-app-b7326",
+      storageBucket: "real-chat-app-b7326.appspot.com",
+      messagingSenderId: "725922035900",
+      appId: "1:725922035900:web:05a95db3d7039183fcf8b9",
+      databaseURL: "https://real-chat-app-b7326-default-rtdb.firebaseio.com",
+    };
+
+    //Global Variable declaration
+    const app = initializeApp(firebaseConfig);
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    const database = getDatabase()
+    let userIndex = 0
+    document.getElementById("signInBtn").addEventListener("click", () => {
+      signInWithPopup(auth, provider)
+        .then((response) => {
+          console.log(response);
+          disp.innerHTML = `
+            <h1>
+              Welcome, ${response.user.displayName}
+            </h1>
+            <h1>
+              Welcome, ${response.user.email}
+            </h1>
+            <img src='${response.user.photoURL}'/>
+          `;
+          let user = {
+            email: response.user.email,
+            displayName: response.user.displayName,
+            profilePic: response.user.photoURL,
+            id: response.user.uid
+          }
+          let userRef = ref(database, `allUsers/${userIndex}`)
+          set(userRef, user)
+          sendEmailVerification(auth.currentUser).then(() => {
+            console.log("successful");
+          });
+          window.location.href = "dashboard.html";
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      let allUsersRef = ref(database, "allUsers");
+      onValue(allUsersRef, (snapshot) => {
+        let data = snapshot.val();
+
+        if (data) {
+          userIndex = data.length;
+        } else {
+          userIndex = 0;
+        }
+
+        console.log(data);
+
+
+
+      })
+    });
+  </script>
+</body>
+
+</html>
